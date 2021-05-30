@@ -1,6 +1,7 @@
 import face_recognition
 import os
 import cv2
+import streamlit as st
 
 KNOWN_FACES_DIR = "known_faces"
 UNKNOWN_FACES_DIR = "unknown_faces"
@@ -52,3 +53,14 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
     cv2.imshow(filename, image)
     cv2.waitKey(10000)
     # cv2.destroyWindow(filename)
+
+    def main():
+        st.title("face detection app")
+        image_file = st.file_uploader(
+            "upload image", type=['jpeg', 'png', 'jpg'])
+        if image_file is not None:
+            image = Image.open(image_file)
+            if st.button("process"):
+                result_img, result_face = detect(image=image)
+                st.image(result_img, use_column_width=True)
+                st.success("Found {} faces".format(len(result_face)))
